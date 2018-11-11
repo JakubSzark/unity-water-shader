@@ -46,3 +46,6 @@ Version 1.2
 Version 1.1
 - Shader should work for older version of Unity
 - Example Scene no longer uses pro-builder
+
+# MIT Liscense
+
