@@ -2,7 +2,7 @@ A Very Customizable Surface Shader for Unity!
 
 Examples:
 
-![alt text](https://i.imgur.com/bUg6u4N.mp4)
+![alt text](https://i.imgur.com/bUg6u4N.gif)
 
 by: /u/AdultLink
 
