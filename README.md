@@ -1,4 +1,4 @@
-# A Very Customizable Surface Shader for Unity!
+# A Very Customizable Water Surface Shader for Unity!
 
 Examples:
 https://i.imgur.com/bUg6u4N.gifv
