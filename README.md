@@ -1,8 +1,10 @@
 A Very Customizable Surface Shader for Unity!
 
 Examples:
+
+![alt text](https://i.imgur.com/bUg6u4N.gif)
+
 by: /u/AdultLink
-![Alt Text](https://i.imgur.com/bUg6u4N.gif)
 
 Currently Works:
 - Main Texture with Distortion
