@@ -24,19 +24,11 @@ How to Use:
 2. Add the Material to any object
 3. Play around!
 
-How to Use Under Effect:
-1. Add Water Script to your water object
-2. Add sphere collider and underwater script to camera
-3. Attach a material with the included image effect
-3. Make sure collider on water and camera are triggers
-4. Disable underwater script on camera
-
 Notes:
 - To have reflections use a reflection probe with box projection active
 and make the smoothness of the material higher than 0
 - You require atleast 2 normal maps for your water for it to look
 good.
-- Please use the DepthFix script on old versions of Unity below 5.4
 
 Version 1.4-1.5
 - Now with Low Poly
