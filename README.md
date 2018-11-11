@@ -1,10 +1,10 @@
-#A Very Customizable Surface Shader for Unity!
+# A Very Customizable Surface Shader for Unity!
 
 Examples:
 https://i.imgur.com/bUg6u4N.gifv
 by: /u/AdultLink
 
-#Currently Works:
+# Currently Works:
 - Main Texture with Distortion
 - Normal Maps with Strength
 - Waves with Optional Noise Texture
@@ -18,12 +18,12 @@ by: /u/AdultLink
 - Low Poly Effect
 - Underwater Effect
 
-#How to Use:
+# How to Use:
 1. Add SzarkWater shader to desired Material
 2. Add the Material to any object
 3. Play around!
 
-#Versions
+# Versions
 Version 1.4-1.5
 - Now with Low Poly
 - Fixed Normals and Normal Distortion
