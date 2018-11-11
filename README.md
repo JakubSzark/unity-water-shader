@@ -24,12 +24,6 @@ How to Use:
 2. Add the Material to any object
 3. Play around!
 
-Notes:
-- To have reflections use a reflection probe with box projection active
-and make the smoothness of the material higher than 0
-- You require atleast 2 normal maps for your water for it to look
-good.
-
 Version 1.4-1.5
 - Now with Low Poly
 - Fixed Normals and Normal Distortion
