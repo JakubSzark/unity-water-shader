@@ -1,10 +1,6 @@
 # Unity-Surface-Water-Shader
 A water surface shader for Unity
 
-Thank you for downloading Szark's Water Shader!
-This is still a WIP Shader and can be improved and added to.
-If you have any issues please email jakubshark@gmail.com.
-
 Currently Works:
 - Main Texture with Distortion
 - Normal Maps with Strength
