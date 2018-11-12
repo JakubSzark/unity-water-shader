@@ -29,7 +29,6 @@ Version 1.4-1.5
 - Fixed Normals and Normal Distortion
 - Only 1 Normal Map can be used
 - Refection is now more correct
-- Changes to Example Map
 - Now with Underwater Image Effect and
 Water Script
 - Changes to Names of Example Materials
@@ -45,6 +44,5 @@ Version 1.2
 
 Version 1.1
 - Shader should work for older version of Unity
-- Example Scene no longer uses pro-builder
 
 # MIT License
