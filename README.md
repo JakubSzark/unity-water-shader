@@ -4,7 +4,7 @@ Example:
 (https://i.imgur.com/bUg6u4N.gifv)
 by: /u/AdultLink
 
-![alt text](https://i.imgur.com/xW8C4T8.gif)
+![alt text](https://i.imgur.com/WfmWXMh.gif)
 
 # Currently Works:
 - Main Texture with Distortion
