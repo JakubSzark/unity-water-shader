@@ -4,6 +4,8 @@ Example:
 (https://i.imgur.com/bUg6u4N.gifv)
 by: /u/AdultLink
 
+[Example](https://i.imgur.com/bUg6u4N.gif)
+
 # Currently Works:
 - Main Texture with Distortion
 - Normal Maps with Strength
