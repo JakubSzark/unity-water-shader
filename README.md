@@ -4,7 +4,7 @@ Example:
 (https://i.imgur.com/bUg6u4N.gifv)
 by: /u/AdultLink
 
-![](https://i.imgur.com/WfmWXMh.gif)
+![Imgur Image](https://i.imgur.com/WfmWXMh.gif)
 
 # Currently Works:
 - Main Texture with Distortion
