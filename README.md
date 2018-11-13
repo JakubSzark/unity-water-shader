@@ -1,13 +1,13 @@
 # A Very Customizable Water Surface Shader for Unity!
 
-Example:
+# Examples
 (https://i.imgur.com/bUg6u4N.gifv)
 by: /u/AdultLink
 
 ![Imgur Image](https://i.imgur.com/rY2u2WH.gif)
 ![Imgur Image](https://i.imgur.com/iRkfJTM.gif)
 
-# Currently Works:
+# Currently Works
 - Main Texture with Distortion
 - Normal Maps with Strength
 - Waves with Optional Noise Texture
@@ -21,7 +21,7 @@ by: /u/AdultLink
 - Low Poly Effect
 - Underwater Effect
 
-# How to Use:
+# How to Use
 1. Add SzarkWater shader to desired Material
 2. Add the Material to any object
 3. Play around!
