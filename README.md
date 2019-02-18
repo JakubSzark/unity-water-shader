@@ -1,13 +1,11 @@
-# A Very Customizable Water Surface Shader for Unity!
-
 # Examples
 (https://i.imgur.com/bUg6u4N.gifv)
 by: /u/AdultLink
 
-![Imgur Image](https://i.imgur.com/rY2u2WH.gif)
-![Imgur Image](https://i.imgur.com/iRkfJTM.gif)
+<img src="https://i.imgur.com/rY2u2WH.gif" width=800>
+<img src="https://i.imgur.com/iRkfJTM.gif" width=800>
 
-# Currently Works
+# Features
 - Main Texture with Distortion
 - Normal Maps with Strength
 - Waves with Optional Noise Texture
