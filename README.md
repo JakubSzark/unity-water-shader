@@ -1,6 +1,7 @@
-# Examples
-<img src="https://i.imgur.com/rY2u2WH.gif" width=800>
-<img src="https://i.imgur.com/iRkfJTM.gif" width=800>
+# How to Use
+1. Add SzarkWater shader to desired Material
+2. Add the Material to any object
+3. Play around!
 
 # Features
 - Main Texture with Distortion
@@ -16,10 +17,9 @@
 - Low Poly Effect
 - Underwater Effect
 
-# How to Use
-1. Add SzarkWater shader to desired Material
-2. Add the Material to any object
-3. Play around!
+# Examples
+<img src="https://i.imgur.com/rY2u2WH.gif" width=800>
+<img src="https://i.imgur.com/iRkfJTM.gif" width=800>
 
 # Versions
 Version 1.4-1.5
@@ -42,5 +42,3 @@ Version 1.2
 
 Version 1.1
 - Shader should work for older version of Unity
-
-# MIT License
