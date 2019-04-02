@@ -15,8 +15,7 @@ Shader "Custom/Szark Water"
 		_Smoothness ("Smoothness", Range(0, 1)) = 0
 		_NormalStrength ("Normal Strength", Range(0, 1)) = 1
 		_FlowSpeed ("Flow Speed", Range(0, 1)) = 0.1
-		[Toggle]
-		_WorldSpaceNrm ("World Space", Float) = 0
+		_WorldSpaceNrm ("World Space", Range(0, 1)) = 0
 		_NormalScale ("Normal Scale", Float) = 1
 		[Space] [Normal]
 		_Normal ("Normal Map", 2D) = "bump" {}
@@ -30,8 +29,7 @@ Shader "Custom/Szark Water"
 		_FalloffDepth ("Falloff Depth", Range(0, 1)) = 0.5
 
 		[Header(Foam)]
-		[Toggle]
-		_UseRamp ("Use Ramp", Float) = 0
+		_FoamRampLerp ("Foam Ramp Lerp", Range(0, 1)) = 0
 		_FoamRamp ("Foam Ramp", 2D) = "white" {}
 		_FoamAmount ("Foam Amount", Range(0, 1)) = 0.1
 		_FoamColor ("Foam Color", Color) = (1,1,1,1)
@@ -58,8 +56,6 @@ Shader "Custom/Szark Water"
 		{ 
 			"RenderType"="Transparent" 
 			"Queue"="Transparent" 
-			"ForceNoShadowCasting" = "True" 
-			"IgnoreProjector"="True"
 		}
 
 		GrabPass { "_Refraction" }
@@ -110,7 +106,7 @@ Shader "Custom/Szark Water"
 		float _TexDistortion;
 		float _FalloffDepth;
 
-		float _UseRamp;
+		float _FoamRampLerp;
 		float _Smoothness;
 		float _WaveSpeed;
 
@@ -146,81 +142,85 @@ Shader "Custom/Szark Water"
 			COMPUTE_EYEDEPTH(o.screenPos.z);
 		}
 
-		half3 animateNormalMaps(Input IN)
+		half3 animateNormalMap(Input IN)
 		{
-			// Flow Map
-			float3 flowMap = tex2D(_FlowMap, IN.uv_FlowMap) * 2.0f - 1.0f;
-			flowMap *= _FlowSpeed;
+			float3 flowMap = (tex2D(_FlowMap, 
+				IN.uv_FlowMap) * 2.0 - 1.0) * _FlowSpeed;
 
-			float phase0 = frac(_Time.y * 0.5f + 0.5f);
-			float phase1 = frac(_Time.y * 0.5f + 1.0f);
+			float phase0 = frac(_Time.y * 0.5 + 0.5);
+			float phase1 = frac(_Time.y * 0.5 + 1.0);
 
-			float2 uv = _WorldSpaceNrm == 0 ? IN.uv_Normal : IN.worldPos.xz;
-			uv *= 0.9 * _NormalScale;
+			float2 uv = lerp(IN.uv_Normal, IN.worldPos.xz, 
+				_WorldSpaceNrm) * 0.9 * _NormalScale;
 
-			// Normals
 			half3 tex1 = tex2D(_Normal, uv + flowMap.xy * phase0);
 			half3 tex2 = tex2D(_Normal, uv + flowMap.xy * phase1);
 
-			// Animated Flow
-			float flowLerp = abs((0.5f - phase0) / 0.5f);
-			return lerp(tex1, tex2, flowLerp);
+			return lerp(tex1, tex2, abs((0.5 - phase0) / 0.5));
 		}
 
-		float clamp(float val, float mi, float ma)
+		float2 distortUV(float2 uv)
 		{
-			return val < mi ? mi : val > ma ? ma : val;
+			uv.x = (sin((uv.x + uv.y) * 8 + _Time.g * 1.3) * 0.02);
+			uv.y = (cos((uv.x - uv.y) * 8 + _Time.g * 2.7) * 0.02);
+			return uv;
+		}
+
+		float sampleDepth(float4 tex)
+		{
+			float depthSample = SAMPLE_DEPTH_TEXTURE_PROJ(_CameraDepthTexture, tex);
+			return LinearEyeDepth(depthSample).r;
 		}
 
 		void surf (Input IN, inout SurfaceOutputStandard o) 
 		{
-			// Texture Distortion
-			IN.uv_MainTex.x += (sin((IN.uv_MainTex.x + IN.uv_MainTex.y) * 
-				8 + _Time.g * 1.3) * 0.02) * _TexDistortion;
-			IN.uv_MainTex.y += (cos((IN.uv_MainTex.x - IN.uv_MainTex.y) * 
-				8 + _Time.g * 2.7) * 0.02) * _TexDistortion;
-
-			// Get Textures
-			half3 normal = animateNormalMaps(IN);
-			IN.grabUV.y += normal.y * _RefractionStrength;
+			// Textures
 			fixed4 refrTex = tex2Dproj(_Refraction, IN.grabUV) * _ShallowColor;
 			fixed4 mainTex = tex2D (_MainTex, IN.uv_MainTex) * _DeepColor;
 
-			// Get Depth for Refraction
-			float depthSample = SAMPLE_DEPTH_TEXTURE_PROJ(_CameraDepthTexture, IN.grabUV);
-			float depth = LinearEyeDepth(depthSample).r;
+			// Texture Distortion
+			IN.uv_MainTex += distortUV(IN.uv_MainTex);
 
-			// Get Depth for Foam
-			float foamSample = SAMPLE_DEPTH_TEXTURE_PROJ(_CameraDepthTexture, IN.screenPos);
-			float foamDepth = abs(LinearEyeDepth(foamSample).r - IN.screenPos.w);
+			// Normal
+			half3 flatNormal = float3(0.5, 0.5, 1);
+			half3 normal = IN.wNormal.y <= 0.5 ? flatNormal : animateNormalMap(IN);
+			normal = lerp(normal, flatNormal,  1 - _NormalStrength * 0.5);
 
-			// Foam and Falloff
-			float foam = _UseRamp == 0 ? 1-step(_FoamAmount, foamDepth) : 
-				1 - saturate((1 - _FoamAmount) * foamDepth);
-			float falloff = 1 - saturate((1 - _FalloffDepth) * (depth - IN.screenPos.w));
+			// Refraction
+			IN.grabUV.y += normal.y * _RefractionStrength;
+
+			// Get Depth Samples
+			float grabPassDepth = sampleDepth(IN.grabUV) - IN.screenPos.w;
+			float screenDepth = abs(sampleDepth(IN.screenPos) - IN.screenPos.w);
+
+			// Falloff
+			float falloff = 1 - saturate((1 - _FalloffDepth) * grabPassDepth);
 			float4 tex = lerp(mainTex, refrTex, falloff * _FalloffStrength);
 
-			tex = lerp(tex, tex * _HeightBrightness * 2, clamp((IN.height + _HeightSpread * 0.5) * 
-				(1 - _HeightSoftness) * 100, 0, 1));
+			// Height Coloring
+			float heightSpread = clamp((IN.height + _HeightSpread * 0.5), 0, 1);
+			heightSpread *= (1 - _HeightSoftness) * 100;
+			tex = lerp(tex, tex * _HeightBrightness * 2, heightSpread);
 
-			// Ramped Foam
-			fixed4 foamTex = tex2D (_FoamRamp, float2(foam, 1));
-			float4 foamRamp = _UseRamp == 1 ? foamTex : float4(0, 0, 0, 0);
+			// Foam
+			float lineFoam = 1 - step(_FoamAmount, screenDepth);
+			float rampFoam = 1 - saturate((1 - _FoamAmount) * 5 * grabPassDepth);
 
-			normal = IN.wNormal.y <= 0.5 ? float3(0.5, 0.5, 1) : normal;
-			normal = lerp(normal, float3(0.5, 0.5, 1),  1 - _NormalStrength * 0.5);
-			tex += _FoamColor * (_UseRamp == 1 ? foamRamp : foam);
+			// Foam Ramp
+			fixed4 foamRamp = tex2D(_FoamRamp, float2(rampFoam, 1));
+			tex += _FoamColor * lerp(lineFoam, foamRamp.r * rampFoam, _FoamRampLerp);
 
-			float lpEffect = dot(_WorldSpaceLightPos0.xyz, 
-				normalize(cross(ddy(IN.worldPos), ddx(IN.worldPos))));
-			lpEffect = lerp(1, lpEffect, _LowPoly);
+			// Low Poly Effect
+			float derivative = normalize(cross(ddy(IN.worldPos), ddx(IN.worldPos)));
+			tex += dot(_WorldSpaceLightPos0.xyz, derivative) * _LowPoly;
 
-			o.Albedo = tex * lpEffect;
+			o.Albedo = tex;
 			o.Normal = UnpackNormal(float4(normal, 1));
 			o.Smoothness = _Smoothness;
 		}
 
 		ENDCG
 	}
+
 	FallBack "Diffuse"
 }
